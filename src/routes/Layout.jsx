@@ -5,11 +5,11 @@ import React from "react";
 
 const Layout = () => {
   return (
-    <div>
+    <div className="w-full">
       <nav>
-        <ul className="flex justify-between ">
+        <ul className="flex justify-between mb-11 text-white">
           <li className="text-xl">NoDilemma</li>
-          <div className="flex gap-7">
+          <div className="flex gap-7 mr-2">
             <li>
               <Link to="/">Home</Link>
             </li>
