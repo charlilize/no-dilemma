@@ -1,8 +1,10 @@
+require('dotenv').config();
+
 // Supabase client that will connect our React app to the Supabase database
 import { createClient } from "@supabase/supabase-js";
 
-const URL = process.env.REACT_APP_SUPABASE_URL; // variables specified to nellify
-const API_KEY = process.env.REACT_APP_SUPABASE_API_KEY;
+const URL = process.env.VITE_APP_SUPABASE_URL; // variables specified to nellify
+const API_KEY = process.env.VITE_APP_SUPABASE_API_KEY;
 
 console.log(URL);
 console.log(API_KEY);
