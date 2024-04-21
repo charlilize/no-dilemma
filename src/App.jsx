@@ -1,4 +1,5 @@
 import './App.css';
+import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button";
 
 function App() {
@@ -11,7 +12,9 @@ function App() {
           Don't go about it alone - post your dilemma and create a poll to gather opinions from 
           fellow members. It's all anonymous.
         </p>
-        <Button className="w-[150px]" variant="outline">Start Asking</Button>
+        <Link to="/forum">
+          <Button className="w-[150px]" variant="outline">Start Asking</Button>
+        </Link>
       </div>
 
     </div>
