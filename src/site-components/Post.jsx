@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleUp } from '@fortawesome/free-regular-svg-icons';
 import { formatDistanceStrict } from 'date-fns';
@@ -12,7 +11,6 @@ const Post = (props) => {
     const date = new Date(timestamp);
     return formatDistanceStrict(date, new Date(), { addSuffix: true, includeSeconds: true });
   }
-
   const formattedTime = formatTimestamp(props.timeCreated);
 
   const handleClickPost = () => {
