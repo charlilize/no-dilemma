@@ -22,7 +22,9 @@ const Forum = () => {
   return (
     <div className="w-full h-screen bg-gray-200 rounded-3xl">
         <div className="flex flex-col items-start my-9 ml-20 gap-3">
-        <h1 className="font-bold text-3xl text-center">Discover and vote on what others are asking...</h1>
+        <div className="flex justify-center w-full">
+          <h1 className="font-bold text-3xl text-center">Discover and vote on what others are asking...</h1>
+        </div>
           <Input placeholder=" Search for a topic or a question" className="w-9/12 text-lg mt-6"/>
           <div className="flex gap-5">
             <Button>Newest</Button>
@@ -30,9 +32,18 @@ const Forum = () => {
           </div>
         </div>
         <div className="flex flex-wrap justify-evenly">
-        {
-
-
+        {posts && posts.length > 0 ? (
+          posts.map((post) => (
+            <Post 
+              key={post.id}
+              id={post.id}
+              title={post.title}
+              description={post.description}
+              timeCreated={post.created_at}
+              upvotes={post.upvotes_count}
+            />
+          ))
+        ) : (<p>No posts created</p>)
         }
         </div>
         <Link to="/createPost">

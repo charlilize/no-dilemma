@@ -5,3 +5,8 @@
 ::-webkit-scrollbar {
   display: none;
 }
+
+.icon:hover {
+  color: red;
+  border-radius: 20px;
+}
