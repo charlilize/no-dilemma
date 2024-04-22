@@ -1,10 +1,24 @@
-import React from "react"
+import React, { useState } from "react"
 import { Input } from "@/components/ui/search-input"
 import { Button } from "@/components/ui/button"
 import Post from "../site-components/Post"
 import { Link } from "react-router-dom"
+import { supabase } from "@/client"
 
 const Forum = () => {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const { data } = await supabase
+        .from("posts")
+        .select()
+        .order("created_at", { ascending: true });
+      setPosts(data);
+    };
+    fetchPosts();
+  }, []);
+
   return (
     <div className="w-full h-screen bg-gray-200 rounded-3xl">
         <div className="flex flex-col items-start my-9 ml-20 gap-3">
@@ -16,9 +30,10 @@ const Forum = () => {
           </div>
         </div>
         <div className="flex flex-wrap justify-evenly">
-          {/* <Post/>
-          <Post/>
-          <Post/> */}
+        {
+
+
+        }
         </div>
         <Link to="/createPost">
           <Button className="fixed bottom-4 left-1/2 transform -translate-x-1/2">+ Create Post</Button>

@@ -44,7 +44,6 @@ const CreatePost = () => {
       setUnableToCreatePost(true);
       return;
     }
-
     if (post.options.some(option => !option.trim())) {
       setUnableToCreatePost(true);
       return;
