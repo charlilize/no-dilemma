@@ -13,6 +13,7 @@ const CreatePost = () => {
     question: "",
     options: [""],
   });
+  const [unableToCreatePost, setUnableToCreatePost] = useState(false);
 
   const addPollOption = () => {
     if (post.options.length < 10) {
@@ -37,6 +38,19 @@ const CreatePost = () => {
   // Push post data to supabase
   const createPost = async (event) => {
     event.preventDefault();
+
+    // Prevent adding empty fields
+    if (!post.title.trim() || !post.descrip.trim() || !post.question.trim()) {
+      setUnableToCreatePost(true);
+      return;
+    }
+
+    if (post.options.some(option => !option.trim())) {
+      setUnableToCreatePost(true);
+      return;
+    }
+
+    setUnableToCreatePost(false);
 
     // Create the post
     const { data: postData, error: postError } = await supabase
@@ -137,6 +151,9 @@ const CreatePost = () => {
             : "+ Add Poll Option"}
         </Button>
         <div className="flex justify-end">
+            <h3 className="text-red-500">
+              {unableToCreatePost == true && (!post.title.trim() || !post.descrip.trim() || !post.question.trim() || post.options.some(option => !option.trim())) ? "A field is empty. Please fill in all fields." : ""}
+            </h3>
             <Link to="/forum">
               <Button>Cancel</Button>
             </Link>
