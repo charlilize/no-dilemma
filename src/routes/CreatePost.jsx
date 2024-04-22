@@ -38,12 +38,50 @@ const CreatePost = () => {
   const createPost = async (event) => {
     event.preventDefault();
 
-    await supabase
-      .from("posts") // call posts table from supabase
-      .insert({ title: post.title, description: descrip.type })
-      .select();
+    // Create the post
+    const { data: postData, error: postError } = await supabase
+    .from("posts")
+    .insert({ title: post.title, description: post.descrip })
+    .select()
+    .single();
+
+    if (postError) {
+      console.error("Error inserting post:", postError);
+      return;
+    }
+
+    const postId = postData.id;
+
+    // Create poll
+    const { data: pollData, error: pollError } = await supabase
+      .from("polls")
+      .insert({ question: post.question, post_id: postId })
+      .select()
+      .single();
+
+    if (pollError) {
+      console.error("Error inserting poll:", pollError);
+      return;
+    }
+
+    const pollId = pollData.id;
+
+    // Insert each poll option
+    const optionInsertPromises = post.options.map((option) => 
+      supabase.from("poll_options").insert({ poll_id: pollId, option})
+    );
+
+    const optionInsertResults = await Promise.all(optionInsertPromises);
+
+    const optionInsertErrors = optionInsertResults.filter((result) => result.error);
   
-      window.location = "/forum";
+    if (optionInsertErrors.length > 0) {
+      console.error("Error inserting poll options:", optionInsertErrors);
+      return;
+    }
+  
+    window.location = "/forum";
+
   };
 
   return (
