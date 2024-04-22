@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Layout from './routes/Layout.jsx'
 import Forum from './routes/Forum.jsx'
 import PostDetails from './site-components/PostDetails.jsx'
+import CreatePost from './routes/CreatePost.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -15,8 +16,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route index={true} path="/" element={<App/>}/>
             <Route index={false} path="/forum" element={<Forum/>}/>
             <Route index={false} path="/postDetails/:postid" element={<PostDetails/>}/>
+            <Route index={false} path="/createPost" element={<CreatePost/>}/>
           </Route>
         </Routes>
       </BrowserRouter>  
-  </React.StrictMode>,
+  </React.StrictMode>, 
 )

@@ -1,7 +1,8 @@
 import React from "react"
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/ui/search-input"
 import { Button } from "@/components/ui/button"
 import Post from "../site-components/Post"
+import { Link } from "react-router-dom"
 
 const Forum = () => {
   return (
@@ -19,7 +20,9 @@ const Forum = () => {
           <Post/>
           <Post/> */}
         </div>
-        <Button className="fixed bottom-4 left-1/2 transform -translate-x-1/2">+ Create Post</Button>
+        <Link to="/createPost">
+          <Button className="fixed bottom-4 left-1/2 transform -translate-x-1/2">+ Create Post</Button>
+        </Link>
       </div>
   )
 };
