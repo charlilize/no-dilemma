@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 const PostDetails = () => {
   const { postid } = useParams(); // get id from the URL
   const [post, setPost] = useState(null); // to hold specific post associated with the id
-  const [poll, setPoll] = useState({ poll_id: "", question: "", options: [""] });
+  const [poll, setPoll] = useState({ poll_id: "", question: "", options: [] });
   
   const [count, setCount] = useState(); 
 
@@ -53,7 +53,27 @@ const PostDetails = () => {
   }, [postid])
 
   // Find poll options associated with the poll
-  // map through the options in the return
+  useEffect(() => {
+    const fetchPollOptions = async () => {
+      if (poll.poll_id) {
+        const { data, error } = await supabase
+          .from("poll_options")
+          .select("option")
+          .eq("poll_id", poll.poll_id);
+  
+        if (error) {
+          console.error("Error retrieving poll options", error);
+        } else {
+          setPoll({ ...poll, options: data.map(option => option.option) });
+        }
+      }
+    };
+  
+    fetchPollOptions();
+  }, [poll.poll_id]);
+  
+
+  
 
   return (
     <div className="w-full h-screen bg-gray-200 rounded-3xl flex flex-col items-center justify-center overflow-y-auto p-4">
@@ -63,22 +83,27 @@ const PostDetails = () => {
           <p>{post.created_at && formatTimestamp(post.created_at)} · 2 answers</p>
           <h1 className="text-3xl bold">{post.title}</h1>
           <p>{post.description}</p>
-
-        {poll ? (
-          <div className=" flex flex-col bg-slate-200 rounded-lg p-1 w-5/12">
-            <h2 className="text-xl text-center">{poll.question}</h2>
-            <Button className="bg-slate-100 text-black hover:bg-slate-300">Example</Button>
-            <Button>Submit</Button>
-          </div>
-        ) : ("")
-        }
-
+          {post && poll && poll.options !== undefined && poll.options !== null ? (
+            poll.options.length > 0 ? (
+              <div className=" flex flex-col bg-slate-200 rounded-lg p-4 w-5/12">
+                <h2 className="text-xl text-center">{poll.question}</h2>
+                {poll.options.map((option, index) => (
+                  <Button className="bg-slate-100 text-black hover:bg-slate-300" key={index}>{option}</Button>
+                ))}
+                <Button>Submit</Button>
+              </div>
+            ) : (
+              <p>Loading options...</p>
+            )
+          ) : (
+            ""
+          )}
         </div>
         <div className="bg-white h-1/2 p-5 md:w-11/12 w-4/5 mb-4 flex flex-col border bg-card text-card-foreground shadow-md max-h-96 overflow-y-auto">
         </div>
       </>
       ) : (
-      <p>Loading...</p>
+      <p>Loading Post...</p>
     )}
     </div>
   )
