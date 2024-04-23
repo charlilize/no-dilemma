@@ -7,13 +7,14 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { faSquareCaretLeft } from '@fortawesome/free-solid-svg-icons';
+import { faCircleUp } from '@fortawesome/free-regular-svg-icons';
 import { Link } from "react-router-dom";
 
 const PostDetails = () => {
   const { postid } = useParams(); // get id from the URL
   const [post, setPost] = useState(null); // to hold specific post associated with the id
   const [poll, setPoll] = useState({ poll_id: "", question: "", options: [] });
-  const [count, setCount] = useState(); 
+  const [count, setCount] = useState(0); 
 
   const location = useLocation();
 
@@ -80,6 +81,18 @@ const PostDetails = () => {
 
   }
 
+  // Update the number of upvotes on the local count variable and the database
+  const updateUpvotes = async (event) => {
+    event.preventDefault();
+    console.log("clicked")
+    await supabase 
+      .from("posts")
+      .update({ upvotes_count: count + 1 })
+      .eq("id", postid)
+
+      setCount((count) => count + 1);
+    };
+
   return (
     <div className="w-full h-screen bg-gray-200 rounded-3xl flex flex-col items-center justify-center overflow-y-auto p-4">
       {post ? (
@@ -119,6 +132,15 @@ const PostDetails = () => {
           ) : (
             <p>Loading poll...</p>
           )}
+          <div className="flex gap-4">
+            <div className="flex gap-2 bg-slate-200 w-16 rounded-lg p-1 items-center">
+              <FontAwesomeIcon onClick={updateUpvotes} icon={faCircleUp} className="icon h-6"/>
+              <p className="text-md">{count}</p>
+            </div>
+            <div className="flex w-28 gap-2 bg-slate-200 rounded-lg p-1 items-center">
+              <p className="text-md">25 comments</p>
+            </div>
+          </div>
         </div>
         <div className="bg-white h-1/2 p-5 md:w-11/12 w-4/5 mb-4 flex flex-col border bg-card text-card-foreground shadow-md max-h-96 overflow-y-auto">
         </div>
