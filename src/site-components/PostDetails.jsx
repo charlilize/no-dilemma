@@ -3,12 +3,16 @@ import { useParams, useLocation } from 'react-router-dom';
 import { supabase } from "../client";
 import { formatDistanceStrict } from 'date-fns';
 import { Button } from "@/components/ui/button"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
+import { faSquareCaretLeft } from '@fortawesome/free-solid-svg-icons';
+import { Link } from "react-router-dom";
 
 const PostDetails = () => {
   const { postid } = useParams(); // get id from the URL
   const [post, setPost] = useState(null); // to hold specific post associated with the id
   const [poll, setPoll] = useState({ poll_id: "", question: "", options: [] });
-  
   const [count, setCount] = useState(); 
 
   const location = useLocation();
@@ -41,7 +45,7 @@ const PostDetails = () => {
       console.error("Error retrieving poll question", error);
     } else {
       const pollData = { question: data.question, poll_id: data.id, options: [] };
-  
+
       const { data: optionsData, error: optionsError } = await supabase
         .from("poll_options")
         .select("option")
@@ -72,19 +76,33 @@ const PostDetails = () => {
     return formatDistanceStrict(date, new Date(), { addSuffix: true, includeSeconds: true });
   }
 
-  
   const chooseOption = () => {
 
   }
 
-  console.log(poll.options)
   return (
     <div className="w-full h-screen bg-gray-200 rounded-3xl flex flex-col items-center justify-center overflow-y-auto p-4">
       {post ? (
       <>
         <div className="bg-white p-5 h-1/2 md:w-11/12 w-4/5 mb-4 flex flex-col border bg-card text-card-foreground shadow-md overflow-y-auto">
-          <p>{post.created_at && formatTimestamp(post.created_at)} · 2 answers</p>
-          <h1 className="text-3xl bold">{post.title}</h1>
+          <div className="flex justify-between">
+            <Link to="/forum">
+              <FontAwesomeIcon className="text-3xl" icon={faSquareCaretLeft} />
+            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <FontAwesomeIcon className="text-3xl" icon={faEllipsis} />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>Edit Post</DropdownMenuItem>
+                <DropdownMenuItem>Delete Post</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <div className="flex justify-between items-center">
+            <p>{post.created_at && formatTimestamp(post.created_at)} · 2 answers</p>
+          </div>
+          <h1 className="text-3xl bold font-extrabold">{post.title}</h1>
           <p>{post.description}</p>
           {post && poll && poll.options !== undefined && poll.options !== null ? (
             poll.options.length > 0 ? (

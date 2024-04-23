@@ -27,11 +27,11 @@ const Forum = () => {
         </div>
           <Input placeholder=" Search for a topic or a question" className="w-9/12 text-lg mt-6"/>
           <div className="flex gap-5">
-            <Button>Newest</Button>
-            <Button>Trending</Button>
+            <Button>Newest</Button>    
+            <Button>Trending</Button> 
           </div>
         </div>
-        <div className="flex flex-wrap justify-evenly">
+        <div className="flex flex-wrap justify-start gap-5 ml-10">
         {posts && posts.length > 0 ? (
           posts.map((post) => (
             <Post 
