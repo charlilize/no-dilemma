@@ -9,12 +9,14 @@ import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { faSquareCaretLeft } from '@fortawesome/free-solid-svg-icons';
 import { faCircleUp } from '@fortawesome/free-regular-svg-icons';
 import { Link } from "react-router-dom";
+import { Input } from "@/components/ui/input";
 
 const PostDetails = () => {
   const { postid } = useParams(); // get id from the URL
   const [post, setPost] = useState(null); // to hold specific post associated with the id
   const [poll, setPoll] = useState({ poll_id: "", question: "", options: [] });
   const [count, setCount] = useState(0); 
+  const [highlightedOption, setHighlightedOption] = useState("");
 
   const location = useLocation();
 
@@ -77,14 +79,17 @@ const PostDetails = () => {
     return formatDistanceStrict(date, new Date(), { addSuffix: true, includeSeconds: true });
   }
 
-  const chooseOption = () => {
-
+  const chooseOption = (option) => {
+    if (option === highlightedOption) {
+      setHighlightedOption("");
+    } else {
+      setHighlightedOption(option);
+    }
   }
 
   // Update the number of upvotes on the local count variable and the database
   const updateUpvotes = async (event) => {
     event.preventDefault();
-    console.log("clicked")
     await supabase 
       .from("posts")
       .update({ upvotes_count: count + 1 })
@@ -122,9 +127,14 @@ const PostDetails = () => {
               <div className=" flex flex-col bg-slate-200 rounded-lg p-4 w-5/12">
                 <h2 className="text-xl text-center">{poll.question}</h2>
                 {poll.options.map((option, index) => (
-                  <Button onClick={chooseOption()} className="bg-slate-100 text-black hover:bg-slate-300" key={index}>{option}</Button>
+                  <Button 
+                    onClick={() => chooseOption(option)} 
+                    className={`bg-slate-100 text-black hover:bg-slate-300 ${highlightedOption === option ? "bg-red-600 text-white hover:bg-red-500" : ""}`}
+                    key={index}>
+                    {option}
+                  </Button>
                 ))}
-                <Button>Submit</Button>
+                <Button disabled={highlightedOption === ""}>Submit</Button>
               </div>
             ) : (
               <p>Loading options...</p>
@@ -143,6 +153,12 @@ const PostDetails = () => {
           </div>
         </div>
         <div className="bg-white h-1/2 p-5 md:w-11/12 w-4/5 mb-4 flex flex-col border bg-card text-card-foreground shadow-md max-h-96 overflow-y-auto">
+          <h2 className="text-xl">Comments</h2>
+          {/* comments here */}
+          <div className="flex "> 
+            <Input placeholder="Add a comment.."/>
+            <Button>Comment</Button>
+          </div>
         </div>
       </>
       ) : (
