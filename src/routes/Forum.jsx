@@ -32,7 +32,7 @@ const Forum = () => {
           </div>
         </div>
         <div className="flex justify-center items-center">
-          <div className="flex w-full flex-wrap justify-between gap-5 ">
+          <div className="flex w-full flex-wrap justify-center gap-10 ">
             {posts && posts.length > 0 ? (
               posts.map((post) => (
                 <Post 

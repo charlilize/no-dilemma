@@ -10,8 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import { faSquareCaretLeft } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsis, faSquareCaretLeft, faSpinner  } from "@fortawesome/free-solid-svg-icons";
 import { faCircleUp } from "@fortawesome/free-regular-svg-icons";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -192,7 +191,9 @@ const PostDetails = () => {
                 <FontAwesomeIcon className="text-3xl" icon={faEllipsis} />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem>Edit Post</DropdownMenuItem>
+                <Link to={`/editPost/${postid}`}>
+                  <DropdownMenuItem>Edit Post</DropdownMenuItem>
+                </Link>
                 <DropdownMenuItem>Delete Post</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -201,6 +202,7 @@ const PostDetails = () => {
             <p>{post.created_at && formatTimestamp(post.created_at)} · {totalVotes} answers</p>
           </div>
           <h1 className="text-3xl bold font-extrabold">{post.title}</h1>
+          <p className="font-extrabold text-md">{post.author}</p>
           <p>{post.description}</p>
           {post && poll && poll.options !== undefined && poll.options !== null ? (
             poll.options.length > 0 ? (
@@ -250,7 +252,7 @@ const PostDetails = () => {
         </div>
       </>
       ) : (
-      <p>Loading Post...</p>
+        <FontAwesomeIcon icon={faSpinner} spinPulse className="h-10"/>
     )}
     </div>
   )

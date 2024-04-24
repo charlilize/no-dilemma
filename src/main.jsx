@@ -7,6 +7,7 @@ import Layout from './routes/Layout.jsx'
 import Forum from './routes/Forum.jsx'
 import PostDetails from './site-components/PostDetails.jsx'
 import CreatePost from './routes/CreatePost.jsx'
+import EditPost from './routes/EditPost.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route index={false} path="/forum" element={<Forum/>}/>
             <Route index={false} path="/postDetails/:postid" element={<PostDetails/>}/>
             <Route index={false} path="/createPost" element={<CreatePost/>}/>
+            <Route index={false} path="/editPost/:postid" element={<EditPost/>}/>
           </Route>
         </Routes>
       </BrowserRouter>  

@@ -8,6 +8,7 @@ import { Link } from "react-router-dom"
 
 const CreatePost = () => {
   const [post, setPost] = useState({
+    user: "",
     title: "",
     descrip: "",
     question: "",
@@ -40,7 +41,7 @@ const CreatePost = () => {
     event.preventDefault();
 
     // Prevent adding empty fields
-    if (!post.title.trim() || !post.descrip.trim() || !post.question.trim()) {
+    if (!post.title.trim() || !post.descrip.trim() || !post.question.trim() || !post.user.trim()) {
       setUnableToCreatePost(true);
       return;
     }
@@ -54,7 +55,7 @@ const CreatePost = () => {
     // Create the post
     const { data: postData, error: postError } = await supabase
     .from("posts")
-    .insert({ title: post.title, description: post.descrip })
+    .insert({ title: post.title, description: post.descrip, author: post.user })
     .select()
     .single();
 
@@ -97,33 +98,49 @@ const CreatePost = () => {
 
   };
 
+  const removeOption = (index) => {
+    setPost((prevPost) => ({
+      ...prevPost,
+      options: prevPost.options.filter((_, i) => i !== index),
+    }))
+  };
+
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="bg-white p-5 mb-4 flex flex-col border bg-card text-card-foreground shadow-2xl rounded-lg h-screen w-1/2">
-        <h1 className="text-3xl bold">New Post</h1>
+    <div className="flex justify-center items-center">
+      <div className="bg-white p-5 flex flex-col border bg-card text-card-foreground shadow-2xl rounded-lg w-1/2 gap-3">
+        <h1 className="text-3xl font-bold">New Post</h1>
+        <Label htmlFor="user">Username</Label>
+        <Input 
+          type="user" 
+          id="user" 
+          placeholder="Enter display name for post" 
+          onChange={handleChange}
+        />
         <Label htmlFor="title">Title</Label>
         <Input 
           type="title" 
           id="title" 
-          placeholder="Post's title..." 
+          placeholder="Post's title" 
           onChange={handleChange}
         />
         <Label htmlFor="descrip">Description</Label>
         <Textarea
           type="descrip"
           id="descrip"
-          placeholder="Explain your dilemma..."
+          placeholder="Explain your dilemma"
           onChange={handleChange}
-        ></Textarea>
-        <h2 className="text-2xl bold">Your Poll</h2>
+        />
+        <h2 className="text-2xl mt-2 font-bold">Your Poll</h2>
         <Label htmlFor="question">Poll Title</Label>
         <Input
           type="question"
           id="question"
-          placeholder="Put your question..."
+          placeholder="Put your question"
           onChange={handleChange}
         />
+        <Label htmlFor="options">Poll Options</Label>
         {post.options.map((option, index) => (
+          <div className="flex">
           <Input
             key={index}
             type="text"
@@ -133,11 +150,13 @@ const CreatePost = () => {
               setPost({
                 ...post,
                 options: post.options.map((opt, i) => // Update poll option if it changes
-                  i === index ? e.target.value : opt
-                ),
-              })
-            }
+                i === index ? e.target.value : opt
+              ),
+            })
+          }
           />
+          <Button onClick={() => removeOption(index)}>Remove</Button>
+          </div>
         ))}
         <Button
           className={`${
@@ -149,9 +168,9 @@ const CreatePost = () => {
             ? "You've reached the maximum options"
             : "+ Add Poll Option"}
         </Button>
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-5 my-2">
             <h3 className="text-red-500">
-              {unableToCreatePost == true && (!post.title.trim() || !post.descrip.trim() || !post.question.trim() || post.options.some(option => !option.trim())) ? "A field is empty. Please fill in all fields." : ""}
+              {unableToCreatePost == true && (!post.title.trim() || !post.descrip.trim() || !post.user.trim() || !post.question.trim() || post.options.some(option => !option.trim())) ? "A field is empty. Please fill in all fields." : ""}
             </h3>
             <Link to="/forum">
               <Button>Cancel</Button>
