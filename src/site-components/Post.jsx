@@ -7,10 +7,13 @@ import { supabase } from "@/client";
 const Post = (props) => {
   const [count, setCount] = useState(0);
 
-  function formatTimestamp(timestamp) {
-    const date = new Date(timestamp);
-    return formatDistanceStrict(date, new Date(), { addSuffix: true, includeSeconds: true });
-  }
+  const formatTimestamp = useMemo(() => {
+    return (timestamp) => {
+      const date = new Date(timestamp);
+      return formatDistanceStrict(date, new Date(), { addSuffix: true, includeSeconds: true });
+    };
+  }, []);
+  
   const formattedTime = formatTimestamp(props.timeCreated);
 
   const handleClickPost = () => {
