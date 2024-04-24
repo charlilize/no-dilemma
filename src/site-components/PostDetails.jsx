@@ -34,6 +34,7 @@ const PostDetails = () => {
     } else {
       setPost(data);
       setCount(data.upvotes_count);
+      setTotalVotes(data.answers_count)
     }
   };
   
@@ -122,15 +123,25 @@ const PostDetails = () => {
         .eq("option", option)
         
         // Update the vote count in the state
-        const updatedOption = [...poll.options];
-        updatedOption[selectedOptionIndex] = {
+        const updatedOptions = [...poll.options];
+        updatedOptions[selectedOptionIndex] = {
           ...selectedOption,
           voteCount: selectedOption.voteCount + 1,
         };
   
-        setPoll((prevPoll) => ({...prevPoll, options: updatedOption }))
+        setPoll((prevPoll) => ({...prevPoll, options: updatedOptions }))
         setVoted(true);
 
+        const votes = updatedOptions.reduce((acc, option) => {
+          return acc + (option.voteCount || 0);
+        }, 0);
+
+        await supabase 
+          .from("posts")
+          .update({ answers_count: votes })
+          .eq("id", postid)
+
+        setTotalVotes(votes);
       } catch (error) {
       console.error("Error voting option", error);
     }
@@ -156,7 +167,7 @@ const PostDetails = () => {
             </DropdownMenu>
           </div>
           <div className="flex justify-between items-center">
-            <p>{post.created_at && formatTimestamp(post.created_at)} · 2 answers</p>
+            <p>{post.created_at && formatTimestamp(post.created_at)} · {totalVotes} answers</p>
           </div>
           <h1 className="text-3xl bold font-extrabold">{post.title}</h1>
           <p>{post.description}</p>

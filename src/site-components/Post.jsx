@@ -58,7 +58,7 @@ const Post = (props) => {
       className="cursor-pointer bg-white p-5 md:w-[480px] w-4/5 flex flex-col border bg-card text-card-foreground shadow-md" 
       onClick={handleClickPost}
     >
-        <p>{formattedTime} · 2 answers</p>
+        <p>{formattedTime} · {props.totalAnswers} answers</p>
         <h1 className="text-xl font-bold overflow-hidden">{props.title}</h1>
         <div className="flex gap-4">
           <div className="flex gap-2 bg-slate-200 w-16 rounded-lg p-1 items-center">

@@ -19,6 +19,7 @@ const Forum = () => {
     fetchPosts();
   }, []);
 
+  console.log(posts)
   return (
     <div className="w-full p-16 h-screen bg-gray-200 rounded-3xl">
         <div className="flex flex-col items-start gap-3">
@@ -36,12 +37,13 @@ const Forum = () => {
             {posts && posts.length > 0 ? (
               posts.map((post) => (
                 <Post 
-                key={post.id}
-                id={post.id}
-                title={post.title}
-                description={post.description}
-                timeCreated={post.created_at}
-                upvotes={post.upvotes_count}
+                  key={post.id}
+                  id={post.id}
+                  title={post.title}
+                  description={post.description}
+                  timeCreated={post.created_at}
+                  upvotes={post.upvotes_count}
+                  totalAnswers={post.answers_count}
                 />
               ))
             ) : (<p>No posts created</p>)
