@@ -55,7 +55,7 @@ const Post = (props) => {
 
   return (
     <div 
-      className="cursor-pointer bg-white p-5 md:w-[400px] w-4/5 flex flex-col border bg-card text-card-foreground shadow-md" 
+      className="cursor-pointer bg-white p-5 md:w-[480px] w-4/5 flex flex-col border bg-card text-card-foreground shadow-md" 
       onClick={handleClickPost}
     >
         <p>{formattedTime} · 2 answers</p>
