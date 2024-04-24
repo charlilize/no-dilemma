@@ -17,7 +17,8 @@ const PostDetails = () => {
   const [poll, setPoll] = useState({ poll_id: "", question: "", options: [] });
   const [count, setCount] = useState(0); 
   const [highlightedOption, setHighlightedOption] = useState("");
-
+  const [voted, setVoted] = useState(false);
+  const [totalVotes, setTotalVotes] = useState(0);
   const location = useLocation();
 
   // To fetch the post data
@@ -37,32 +38,35 @@ const PostDetails = () => {
   };
   
   // To fetch the poll data w/ the options
-  const fetchPoll = async () => {
-    const { data, error } = await supabase
-      .from("polls")
-      .select()
-      .eq("post_id", postid)
-      .single();
-  
-    if (error) {
-      console.error("Error retrieving poll question", error);
-    } else {
-      const pollData = { question: data.question, poll_id: data.id, options: [] };
-
-      const { data: optionsData, error: optionsError } = await supabase
-        .from("poll_options")
-        .select("option")
-        .eq("poll_id", data.id);
-  
-      if (optionsError) {
-        console.error("Error retrieving poll options", optionsError);
+    const fetchPoll = async () => {
+      const { data, error } = await supabase
+        .from("polls")
+        .select()
+        .eq("post_id", postid)
+        .single();
+    
+      if (error) {
+        console.error("Error retrieving poll question", error);
       } else {
-        pollData.options = optionsData.map((option) => option.option);
+        const pollData = { question: data.question, poll_id: data.id, options: [] }; // question and poll_id are populated
+
+        const { data: optionsData, error: optionsError } = await supabase
+          .from("poll_options")
+          .select()
+          .eq("poll_id", data.id);
+
+        if (optionsError) {
+          console.error("Error retrieving poll options", optionsError);
+        } else {
+          pollData.options = optionsData.map((option) => ({ // retrieve option and vote count
+            option: option.option,
+            voteCount: option.vote_count,
+          }));
+        }
+        
+        setPoll(pollData); // store all data in usestate poll data
       }
-  
-      setPoll(pollData);
-    }
-  };
+    };
 
   // Fetch the data if the id or location changes
   useEffect(() => {
@@ -98,11 +102,45 @@ const PostDetails = () => {
       setCount((count) => count + 1);
     };
 
+  // Vote an option and update supabase
+  const voteOption = async (option, event) => {
+    try{
+      // to find where the option lies in the options array in poll variable
+      const selectedOptionIndex = poll.options.findIndex((opt) => opt.option === option)
+  
+      if (selectedOptionIndex === -1) {
+        console.error("Selected option not found in poll options");
+        return;
+      }
+
+      const selectedOption = poll.options[selectedOptionIndex];
+  
+      // Update the vote count in the database
+      const { error } = await supabase 
+        .from("poll_options")
+        .update({ vote_count: selectedOption.voteCount + 1 })
+        .eq("option", option)
+        
+        // Update the vote count in the state
+        const updatedOption = [...poll.options];
+        updatedOption[selectedOptionIndex] = {
+          ...selectedOption,
+          voteCount: selectedOption.voteCount + 1,
+        };
+  
+        setPoll((prevPoll) => ({...prevPoll, options: updatedOption }))
+        setVoted(true);
+
+      } catch (error) {
+      console.error("Error voting option", error);
+    }
+  };
+
   return (
     <div className="w-full h-screen bg-gray-200 rounded-3xl flex flex-col items-center justify-center overflow-y-auto p-4">
       {post ? (
       <>
-        <div className="bg-white p-5 h-1/2 md:w-11/12 w-4/5 mb-4 flex flex-col border bg-card text-card-foreground shadow-md overflow-y-auto">
+        <div className="bg-white p-5 md:w-11/12 w-4/5 mb-4 flex flex-col border bg-card text-card-foreground shadow-md">
           <div className="flex justify-between">
             <Link to="/forum">
               <FontAwesomeIcon className="text-3xl" icon={faSquareCaretLeft} />
@@ -126,15 +164,23 @@ const PostDetails = () => {
             poll.options.length > 0 ? (
               <div className=" flex flex-col bg-slate-200 rounded-lg p-4 w-5/12">
                 <h2 className="text-xl text-center">{poll.question}</h2>
-                {poll.options.map((option, index) => (
-                  <Button 
-                    onClick={() => chooseOption(option)} 
-                    className={`bg-slate-100 text-black hover:bg-slate-300 ${highlightedOption === option ? "bg-red-600 text-white hover:bg-red-500" : ""}`}
-                    key={index}>
-                    {option}
-                  </Button>
-                ))}
-                <Button disabled={highlightedOption === ""}>Submit</Button>
+                {voted === false ? (
+                  poll.options.map((option, index) => (
+                    <Button 
+                      onClick={() => chooseOption(option.option)} 
+                      className={`bg-slate-100 text-black justify-start hover:bg-slate-300 ${highlightedOption === option.option ? "bg-red-600 text-white hover:bg-red-500" : ""}`}
+                      key={index}>
+                      {option.option}
+                    </Button>
+                  ))
+                ) : (poll.options.map((option, index) => (
+                  <div className="bg-white flex justify-between h-10 px-4 py-2 text-sm" key={index}>
+                    <p>{option.option}</p>
+                    <p>{option.voteCount} votes</p>
+                  </div>
+                )))
+                }
+                <Button disabled={highlightedOption === "" || voted === true} onClick={() => voteOption(highlightedOption)}>Submit</Button>
               </div>
             ) : (
               <p>Loading options...</p>
