@@ -14,6 +14,8 @@ import { faEllipsis, faSquareCaretLeft, faSpinner  } from "@fortawesome/free-sol
 import { faCircleUp } from "@fortawesome/free-regular-svg-icons";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
+import CommentSection from "./CommentSection";
+import DeletePostButton from "./DeletePostButton";
 
 const PostDetails = () => {
   const { postid } = useParams(); // get id from the URL
@@ -194,7 +196,13 @@ const PostDetails = () => {
                 <Link to={`/editPost/${postid}`}>
                   <DropdownMenuItem>Edit Post</DropdownMenuItem>
                 </Link>
-                <DropdownMenuItem>Delete Post</DropdownMenuItem>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                  <DeletePostButton
+                    btnCSS={false}
+                    postid={postid}
+                    pollid={poll.poll_id}
+                  />
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -242,14 +250,8 @@ const PostDetails = () => {
             </div>
           </div>
         </div>
-        <div className="bg-white h-1/2 p-5 md:w-11/12 w-4/5 mb-4 flex flex-col border bg-card text-card-foreground shadow-md max-h-96 overflow-y-auto">
-          <h2 className="text-xl">Comments</h2>
-          {/* comments here */}
-          <div className="flex "> 
-            <Input placeholder="Add a comment.."/>
-            <Button>Comment</Button>
-          </div>
-        </div>
+        <CommentSection
+        />
       </>
       ) : (
         <FontAwesomeIcon icon={faSpinner} spinPulse className="h-10"/>

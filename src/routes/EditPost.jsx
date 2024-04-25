@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import DeletePostButton from "@/site-components/DeletePostButton";
 
 const EditPost = () => {
   const { postid } = useParams();
@@ -18,16 +19,20 @@ const EditPost = () => {
   const [poll, setPoll] = useState({ poll_id: "", question: "", options: [] });
   const [newOptions, setNewOptions] = useState([]); // New state for new poll options
   const [unableToEditPost, setUnableToEditPost] = useState(false);
+  const [duplicateOptions, setDuplicateOptions] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [postData, pollData] = await Promise.all([fetchPost(), fetchPoll()]);
+        const [postData, pollData] = await Promise.all([
+          fetchPost(),
+          fetchPoll(),
+        ]);
         setPost({
           user: postData.data.author,
           title: postData.data.title,
           descrip: postData.data.description,
-        })
+        });
         setPoll(pollData);
       } catch (error) {
         console.error("Error fetching data", error);
@@ -63,7 +68,11 @@ const EditPost = () => {
     if (error) {
       console.error("Error retrieving poll question", error);
     } else {
-      const pollData = { question: data.question, poll_id: data.id, options: [] };
+      const pollData = {
+        question: data.question,
+        poll_id: data.id,
+        options: [],
+      };
 
       const { data: optionsData, error: optionsError } = await supabase
         .from("poll_options")
@@ -106,17 +115,24 @@ const EditPost = () => {
     event.preventDefault();
 
     // Prevent adding empty fields
-    if (
-      !post.title.trim() ||
-      !post.descrip.trim() ||
-      !post.user.trim() ||
-      poll.options.some((option) => !option?.trim()) ||
-      newOptions.some((option) => !option?.trim())
-    ) {
+    if (!post.title.trim() || !post.descrip.trim() || !poll.question.trim() || !post.user.trim()) {
       setUnableToEditPost(true);
+      setDuplicateOptions(false);
+      return;
+    }
+    if (newOptions.some(option => !option.trim())) {
+      setUnableToEditPost(true);
+      setDuplicateOptions(false);
+      return;
+    }
+    const uniqueOptions = new Set(newOptions.map((option) => option.trim().toLowerCase())); // check if any options have the same name
+    if (uniqueOptions.size !== newOptions.length) {
+      setDuplicateOptions(true);
+      console.error('Duplicate options are not allowed.');
       return;
     }
     setUnableToEditPost(false);
+    setDuplicateOptions(false);
 
     try {
       // Edit the post
@@ -131,7 +147,9 @@ const EditPost = () => {
 
       // Add new poll options
       const newOptionPromises = newOptions.map((opt) =>
-        supabase.from("poll_options").insert({ option: opt, poll_id: poll.poll_id })
+        supabase
+          .from("poll_options")
+          .insert({ option: opt, poll_id: poll.poll_id })
       );
 
       const newOptionResults = await Promise.all(newOptionPromises);
@@ -180,7 +198,10 @@ const EditPost = () => {
               onChange={handleChange}
             />
             <h2 className="text-2xl mt-2 font-bold">Your Poll</h2>
-            <h3 className="text-red-500">*Current poll question and options cannot be changed after publishing to protect voter intent.</h3>
+            <h3 className="text-red-500">
+              *Current poll question and options cannot be changed after
+              publishing to protect voter intent.
+            </h3>
             <Label htmlFor="question">Poll Title</Label>
             <Input
               type="question"
@@ -199,32 +220,54 @@ const EditPost = () => {
                   type="text"
                   placeholder={`Option ${poll.options.length + index + 1}`}
                   value={option}
-                  onChange={(e) => handleNewPollOptionChange(index, e.target.value)}
+                  onChange={(e) =>
+                    handleNewPollOptionChange(index, e.target.value)
+                  }
                 />
                 <Button onClick={() => removeNewOption(index)}>Remove</Button>
               </div>
             ))}
             <Button
               className={`${
-                poll.options.length + newOptions.length >= 10 ? "bg-red-500 cursor-not-allowed hover:bg-red-600" : ""
+                poll.options.length + newOptions.length >= 10
+                  ? "bg-red-500 cursor-not-allowed hover:bg-red-600"
+                  : ""
               }`}
               onClick={addNewPollOption}
             >
               {poll.options.length + newOptions.length >= 10
                 ? "You've reached the maximum options"
                 : "+ Add Poll Option"}
-            </Button>            
-        <div className="flex justify-end gap-5 my-2">
-            <h3 className="text-red-500">
-              {unableToEditPost == true && 
-                (!post.title.trim() || !post.descrip.trim() || !post.user.trim() || !poll.question.trim() || newOptions.some(option => !option.trim()))
-                 ? "A field is empty. Please fill in all fields." : ""}
-            </h3>
-            <Link to="/forum">
-              <Button>Cancel</Button>
-            </Link>
-            <Button type="submit" value="submit" onClick={handleSubmit} className="bg-red-500 ">Edit Post</Button>
-        </div>
+            </Button>
+            <div className="flex justify-end gap-5 my-2">
+              <h3 className="text-red-500">
+                {unableToEditPost == true &&
+                (!post.title.trim() ||
+                  !post.descrip.trim() ||
+                  !post.user.trim() ||
+                  !poll.question.trim() ||
+                  newOptions.some((option) => !option.trim()))
+                  ? "A field is empty. Please fill in all fields."
+                  : ""}
+                  {duplicateOptions ===  true ? " Options cannot have the same name." : ""}
+              </h3>
+              <Link to="/forum">
+                <Button>Cancel</Button>
+              </Link>
+              <DeletePostButton
+                postid={postid}
+                pollid={poll.poll_id}
+                btnCSS={true}
+              />
+              <Button
+                type="submit"
+                value="submit"
+                onClick={handleSubmit}
+                className="bg-red-500 "
+              >
+                Edit Post
+              </Button>
+            </div>
           </>
         ) : (
           <p>Loading...</p>

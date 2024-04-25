@@ -15,6 +15,7 @@ const CreatePost = () => {
     options: [""],
   });
   const [unableToCreatePost, setUnableToCreatePost] = useState(false);
+  const [duplicateOptions, setDuplicateOptions] = useState(false);
 
   const addPollOption = () => {
     if (post.options.length < 10) {
@@ -43,14 +44,22 @@ const CreatePost = () => {
     // Prevent adding empty fields
     if (!post.title.trim() || !post.descrip.trim() || !post.question.trim() || !post.user.trim()) {
       setUnableToCreatePost(true);
+      setDuplicateOptions(false);
       return;
     }
     if (post.options.some(option => !option.trim())) {
       setUnableToCreatePost(true);
+      setDuplicateOptions(false);
       return;
     }
-
+    const uniqueOptions = new Set(post.options.map((option) => option.trim().toLowerCase())); // check if any options have the same name
+    if (uniqueOptions.size !== post.options.length) {
+      setDuplicateOptions(true);
+      console.error('Duplicate options are not allowed.');
+      return;
+    }
     setUnableToCreatePost(false);
+    setDuplicateOptions(false);
 
     // Create the post
     const { data: postData, error: postError } = await supabase
@@ -171,6 +180,7 @@ const CreatePost = () => {
         <div className="flex justify-end gap-5 my-2">
             <h3 className="text-red-500">
               {unableToCreatePost == true && (!post.title.trim() || !post.descrip.trim() || !post.user.trim() || !post.question.trim() || post.options.some(option => !option.trim())) ? "A field is empty. Please fill in all fields." : ""}
+              {duplicateOptions ===  true ? " Options cannot have the same name." : ""}
             </h3>
             <Link to="/forum">
               <Button>Cancel</Button>
