@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { supabase } from "../client";
+import Comment from "./Comment";
 
 const API_URL = "https://api.api-ninjas.com/v1/randomuser";
 const API_KEY = import.meta.env.VITE_RANDOM_USER_API_KEY;
@@ -31,7 +32,7 @@ const CommentSection = ({ postid }) => {
       }
     }
     fetchComments();
-  }, [postid]);
+  }, [comments]);
 
   // retrieve random username when user comments
   useEffect(() => {
@@ -66,7 +67,7 @@ const CommentSection = ({ postid }) => {
     }
     setFailedSubmit(false);
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("comments")
       .insert({
         comment: userComment.text,
@@ -80,6 +81,7 @@ const CommentSection = ({ postid }) => {
     } else {
       setUserComment((prevState) => ({ ...prevState, text: "" }));
       document.getElementById("comment").value = "";
+      fetchComments();
       setCommented(true);
     }
   };
@@ -91,9 +93,9 @@ const CommentSection = ({ postid }) => {
     }));
   };
 
-  console.log(userComment.text)
+  console.log(comments)
   return (
-    <div className="bg-white h-1/2 p-5 md:w-11/12 w-4/5 mb-4 flex flex-col border bg-card text-card-foreground shadow-md max-h-96 overflow-y-auto">
+    <div className="bg-white p-5 md:w-11/12 w-4/5 mb-4 flex flex-col border bg-card text-card-foreground shadow-md">
       <h2 className="text-xl">Comments</h2>
       <h3 className="text-red-500">
         {failedSubmit ? "Unable to comment. Please try again." : ""}
@@ -109,6 +111,19 @@ const CommentSection = ({ postid }) => {
         </Button>
       </div>
       <h3 className="text-green-500">{commented ? "Sent!" : ""}</h3>
+      <div className="flex flex-col gap-5">
+        {comments ? (
+          comments.map((com) => (
+            <Comment
+              key={com.id}
+              user={com.author}
+              text={com.comment}
+              time={com.created_at}
+            />
+          ))
+        ) : (<p>Loading comments...</p>)
+        }
+      </div>
     </div>
   );
 };

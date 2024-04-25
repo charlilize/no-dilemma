@@ -180,7 +180,7 @@ const PostDetails = () => {
   };
 
   return (
-    <div className="w-full h-screen bg-gray-200 rounded-3xl flex flex-col items-center justify-center overflow-y-auto p-4">
+    <div className="w-full bg-gray-200 rounded-3xl flex flex-col items-center justify-center overflow-y-auto p-4">
       {post ? (
       <>
         <div className="bg-white p-5 md:w-11/12 w-4/5 mb-4 flex flex-col border bg-card text-card-foreground shadow-md">
