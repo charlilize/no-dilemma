@@ -20,7 +20,7 @@ const Forum = () => {
   }, []);
 
   return (
-    <div className="w-full p-16 h-screen bg-gray-200 rounded-3xl">
+    <div className="w-full p-16 min-h-screen bg-gray-200 rounded-3xl">
         <div className="flex flex-col items-start gap-3">
         <div className="flex justify-center w-full">
           <h1 className="font-bold text-3xl text-center">Discover and vote on what others are asking...</h1>
