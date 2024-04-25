@@ -63,10 +63,10 @@ const CreatePost = () => {
 
     // Create the post
     const { data: postData, error: postError } = await supabase
-    .from("posts")
-    .insert({ title: post.title, description: post.descrip, author: post.user })
-    .select()
-    .single();
+      .from("posts")
+      .insert({ title: post.title, description: post.descrip, author: post.user })
+      .select()
+      .single();
 
     if (postError) {
       console.error("Error inserting post:", postError);

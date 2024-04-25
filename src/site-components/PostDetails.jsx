@@ -251,6 +251,7 @@ const PostDetails = () => {
           </div>
         </div>
         <CommentSection
+          postid={postid}
         />
       </>
       ) : (
