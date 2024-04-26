@@ -91,7 +91,7 @@ const Forum = () => {
         <div className="flex justify-center w-full">
           <h1 className="font-extrabold text-3xl text-center">Discover and vote on what others are asking...</h1>
         </div>
-          <Input placeholder=" Search for a topic or a question" className="w-9/12 text-lg mt-6" onChange={handleChange}/>
+          <Input placeholder=" Search for a topic or a question" className="w-full text-lg mt-6" onChange={handleChange}/>
           <div className="flex gap-5">
             <button onClick={() => sortByNewest(posts)}className={`bg-mesa hover:bg-mesa-light text-white font-bold py-2 px-4 rounded ${newestFilter === true ? "border-2 border-black" : "border-2 border-mes"}`}>Newest</button>    
             <button onClick={() => sortByUpvotes(posts)} className={`bg-mesa hover:bg-mesa-light text-white font-bold py-2 px-4 rounded ${trendingFilter === true ? "border-2 border-black" : "border-2 border-mes"}`}>Trending</button> 

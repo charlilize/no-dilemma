@@ -149,7 +149,7 @@ const CreatePost = () => {
         />
         <Label htmlFor="options">Poll Options</Label>
         {post.options.map((option, index) => (
-          <div className="flex">
+          <div className="flex" key={index}>
           <Input
             key={index}
             type="text"

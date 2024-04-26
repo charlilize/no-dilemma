@@ -168,7 +168,6 @@ const EditPost = () => {
     }
   };
 
-  console.log(unableToEditPost)
   return (
     <div className="flex justify-center items-center">
       <div className="bg-white p-5 flex flex-col border bg-card text-card-foreground shadow-2xl rounded-lg w-1/2 gap-3">

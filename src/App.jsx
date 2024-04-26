@@ -10,7 +10,7 @@ function App() {
         <img src={cover} />
         <div className="flex flex-col gap-5">
           <h1 className="text-6xl font-bold">
-            Struggling to Make a<h1 className="text-mesa">Choice?</h1>
+            Struggling to Make a<span className="text-mesa"> Choice?</span>
           </h1>
           <p className="font-bold text-lg">
             Don't go about it alone - post your dilemma and create a poll to
