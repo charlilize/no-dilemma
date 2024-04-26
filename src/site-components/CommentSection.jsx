@@ -107,9 +107,9 @@ const CommentSection = ({ postid, onDataChange }) => {
           id="comment"
           placeholder="Add a comment.."
         />
-        <Button type="submit" onClick={handleSubmit}>
+        <button className="bg-mesa hover:bg-mesa-light text-white font-bold py-2 px-4 border-b-4 border-black rounded" type="submit" onClick={handleSubmit}>
           Comment
-        </Button>
+        </button>
       </div>
       <h3 className="text-green-500">{commented ? "Sent!" : ""}</h3>
       <div className="flex flex-col">

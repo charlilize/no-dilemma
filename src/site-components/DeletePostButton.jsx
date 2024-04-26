@@ -30,7 +30,7 @@ const DeletePostButton = ({ postid, pollid, btnCSS }) => {
 
  return (
     <AlertDialog>
-      <AlertDialogTrigger className={btnCSS === true ? "bg-primary text-sm text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 rounded-lg" : ""}>
+      <AlertDialogTrigger className={btnCSS === true ? "bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 border-b-4 border-black rounded" : ""}>
         Delete
       </AlertDialogTrigger>
     <AlertDialogContent>

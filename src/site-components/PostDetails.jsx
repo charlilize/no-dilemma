@@ -224,7 +224,7 @@ const PostDetails = () => {
                   memoizedOptions.map((option, index) => (
                     <Button 
                       onClick={() => chooseOption(option.option)} 
-                      className={`bg-slate-100 text-black justify-start hover:bg-slate-300 ${highlightedOption === option.option ? "bg-red-600 text-white hover:bg-red-500" : ""}`}
+                      className={`bg-slate-100 text-black justify-start hover:bg-slate-300 ${highlightedOption === option.option ? "bg-mesa text-white hover:bg-mesa-light" : ""}`}
                       key={index}>
                       {option.option}
                     </Button>

@@ -183,9 +183,9 @@ const CreatePost = () => {
               {duplicateOptions ===  true ? " Options cannot have the same name." : ""}
             </h3>
             <Link to="/forum">
-              <Button>Cancel</Button>
+              <button className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 border-b-4 border-black rounded">Cancel</button>
             </Link>
-            <Button type="submit" value="submit" onClick={createPost} className="bg-red-500 ">Create Post</Button>
+            <button type="submit" value="submit" onClick={createPost} className="bg-mesa hover:bg-mesa-light text-white font-bold py-2 px-4 border-b-4 border-black rounded">Create Post</button>
         </div>
       </div>
     </div>

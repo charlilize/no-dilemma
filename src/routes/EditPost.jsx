@@ -101,7 +101,7 @@ const EditPost = () => {
   };
 
   const addNewPollOption = () => {
-    if (newOptions.length < 10) {
+    if (poll.options.length + newOptions.length < 10) {
       setNewOptions((prevOptions) => [...prevOptions, ""]);
     }
   };
@@ -168,6 +168,7 @@ const EditPost = () => {
     }
   };
 
+  console.log(poll.options.length + newOptions.length)
   return (
     <div className="flex justify-center items-center">
       <div className="bg-white p-5 flex flex-col border bg-card text-card-foreground shadow-2xl rounded-lg w-1/2 gap-3">
@@ -230,7 +231,7 @@ const EditPost = () => {
             <Button
               className={`${
                 poll.options.length + newOptions.length >= 10
-                  ? "bg-red-500 cursor-not-allowed hover:bg-red-600"
+                  ? "bg-red-500 cursor-not-allowed disabled hover:bg-red-600"
                   : ""
               }`}
               onClick={addNewPollOption}
@@ -252,21 +253,21 @@ const EditPost = () => {
                   {duplicateOptions ===  true ? " Options cannot have the same name." : ""}
               </h3>
               <Link to="/forum">
-                <Button>Cancel</Button>
+                <button className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 border-b-4 border-black rounded">Cancel</button>
               </Link>
               <DeletePostButton
                 postid={postid}
                 pollid={poll.poll_id}
                 btnCSS={true}
               />
-              <Button
+              <button
                 type="submit"
                 value="submit"
                 onClick={handleSubmit}
-                className="bg-red-500 "
+                className="bg-mesa hover:bg-mesa-light text-white font-bold py-2 px-4 border-b-4 border-black rounded"
               >
                 Edit Post
-              </Button>
+              </button>
             </div>
           </>
         ) : (
