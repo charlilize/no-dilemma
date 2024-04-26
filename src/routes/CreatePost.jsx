@@ -42,12 +42,12 @@ const CreatePost = () => {
     event.preventDefault();
 
     // Prevent adding empty fields
-    if (!post.title.trim() || !post.descrip.trim() || !post.question.trim() || !post.user.trim()) {
+    if (!post.title.trim() || !post.descrip.trim() || !post.question.trim() || !post.user.trim() || post.options.length === 0) {
       setUnableToCreatePost(true);
       setDuplicateOptions(false);
       return;
     }
-    if (post.options.some(option => !option.trim()) || post.options.length === 0) {
+    if (post.options.some(option => !option.trim())) {
       setUnableToCreatePost(true);
       setDuplicateOptions(false);
       return;
