@@ -215,11 +215,11 @@ const PostDetails = () => {
           </div>
           <h1 className="text-3xl bold font-extrabold">{post.title}</h1>
           <p className="font-extrabold text-md">{post.author}</p>
-          <p>{post.description}</p>
+          <p className="m-3">{post.description}</p>
           {post && poll && poll.options !== undefined && poll.options !== null ? (
             poll.options.length > 0 ? (
-              <div className=" flex flex-col bg-slate-200 rounded-lg p-4 w-5/12">
-                <h2 className="text-xl text-center">{poll.question}</h2>
+              <div className=" flex flex-col bg-slate-200 rounded-lg p-3 w-5/12 mb-4">
+                <h2 className="text-xl font-bold mb-2 text-center">{poll.question}</h2>
                 {voted === false ? (
                   memoizedOptions.map((option, index) => (
                     <Button 

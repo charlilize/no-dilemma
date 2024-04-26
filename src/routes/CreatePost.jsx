@@ -47,7 +47,7 @@ const CreatePost = () => {
       setDuplicateOptions(false);
       return;
     }
-    if (post.options.some(option => !option.trim())) {
+    if (post.options.some(option => !option.trim()) || post.options.length === 0) {
       setUnableToCreatePost(true);
       setDuplicateOptions(false);
       return;

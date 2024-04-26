@@ -58,11 +58,11 @@ const Post = (props) => {
 
   return (
     <div 
-      className="cursor-pointer bg-white p-5 md:w-[450px] w-4/5 flex flex-col border bg-card text-card-foreground shadow-md" 
+      className="cursor-pointer hover:bg-gray-100 bg-white p-5 md:w-[450px] w-4/5 flex flex-col border bg-card text-card-foreground shadow-md" 
       onClick={handleClickPost}
     >
         <p>{formattedTime} · {props.totalAnswers} answers</p>
-        <h1 className="text-xl font-bold overflow-hidden">{props.title}</h1>
+        <h1 className="text-xl font-extrabold overflow-hidden">{props.title}</h1>
         <div className="flex gap-4">
           <div className="flex gap-2 bg-slate-200 w-16 rounded-lg p-1 items-center">
             <FontAwesomeIcon onClick={updateUpvotes} icon={faCircleUp} className="icon h-6"/>

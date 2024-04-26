@@ -1,5 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
 #root {
   padding: 2rem;
+  font-family: "Varela Round", sans-serif;
 }
 
 ::-webkit-scrollbar {
@@ -10,3 +13,4 @@
   color: red;
   border-radius: 20px;
 }
+

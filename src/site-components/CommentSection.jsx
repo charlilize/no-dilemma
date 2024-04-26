@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { supabase } from "../client";
 import Comment from "./Comment";
 
@@ -97,15 +96,16 @@ const CommentSection = ({ postid, onDataChange }) => {
 
   return (
     <div className="bg-white p-5 md:w-11/12 w-4/5 mb-4 flex flex-col border bg-card text-card-foreground shadow-md">
-      <h2 className="text-xl">Comments</h2>
+      <h2 className="text-xl font-bold">Comments</h2>
       <h3 className="text-red-500">
         {failedSubmit ? "Unable to comment. Please try again." : ""}
       </h3>
-      <div className="flex ">
+      <div className="flex gap-2">
         <Input
           onChange={handleChange}
           id="comment"
           placeholder="Add a comment.."
+          className="text-md"
         />
         <button className="bg-mesa hover:bg-mesa-light text-white font-bold py-2 px-4 border-b-4 border-black rounded" type="submit" onClick={handleSubmit}>
           Comment

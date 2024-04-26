@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
 @tailwind base;
   @tailwind components;
   @tailwind utilities;
@@ -72,10 +73,10 @@
     }
     body {
       @apply bg-background text-foreground;
+      font-family: "Varela Round", sans-serif;
     }
   }
 
   body {
     background-color: #606C38;
   }
-  
