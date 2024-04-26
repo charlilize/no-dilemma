@@ -68,9 +68,6 @@ const Post = (props) => {
             <FontAwesomeIcon onClick={updateUpvotes} icon={faCircleUp} className="icon h-6"/>
             <p className="text-md">{count}</p>
           </div>
-          <div className="flex w-28 gap-2 bg-slate-200 rounded-lg p-1 items-center">
-            <p className="text-md">25 comments</p>
-          </div>
         </div>
     </div>
   );

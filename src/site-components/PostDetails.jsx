@@ -13,7 +13,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis, faSquareCaretLeft, faSpinner  } from "@fortawesome/free-solid-svg-icons";
 import { faCircleUp } from "@fortawesome/free-regular-svg-icons";
 import { Link } from "react-router-dom";
-import { Input } from "@/components/ui/input";
 import CommentSection from "./CommentSection";
 import DeletePostButton from "./DeletePostButton";
 
@@ -25,6 +24,7 @@ const PostDetails = () => {
   const [highlightedOption, setHighlightedOption] = useState("");
   const [voted, setVoted] = useState(false);
   const [totalVotes, setTotalVotes] = useState(0);
+  const [numComments, setNumComments] = useState(0);
   const location = useLocation();
 
   const formatTimestamp = useMemo(() => {
@@ -179,6 +179,10 @@ const PostDetails = () => {
     }
   };
 
+  const handleDataFromChild = (childData) => {
+    setNumComments(childData);
+  }
+
   return (
     <div className="w-full bg-gray-200 rounded-3xl flex flex-col items-center justify-center overflow-y-auto p-4">
       {post ? (
@@ -240,18 +244,19 @@ const PostDetails = () => {
           ) : (
             <p>Loading poll...</p>
           )}
-          <div className="flex gap-4">
+          <div className="flex gap-4 font-semibold">
             <div className="flex gap-2 bg-slate-200 w-16 rounded-lg p-1 items-center">
               <FontAwesomeIcon onClick={updateUpvotes} icon={faCircleUp} className="icon h-6"/>
               <p className="text-md">{count}</p>
             </div>
-            <div className="flex w-28 gap-2 bg-slate-200 rounded-lg p-1 items-center">
-              <p className="text-md">25 comments</p>
+            <div className="flex w-28 gap-2 bg-slate-200 rounded-lg p-1 items-center justify-center">
+              <p className="text-md ">{numComments} comments</p>
             </div>
           </div>
         </div>
         <CommentSection
           postid={postid}
+          onDataChange={handleDataFromChild}
         />
       </>
       ) : (

@@ -7,7 +7,7 @@ import Comment from "./Comment";
 const API_URL = "https://api.api-ninjas.com/v1/randomuser";
 const API_KEY = import.meta.env.VITE_RANDOM_USER_API_KEY;
 
-const CommentSection = ({ postid }) => {
+const CommentSection = ({ postid, onDataChange }) => {
   const [userComment, setUserComment] = useState({
     text: "",
     username: "",
@@ -32,6 +32,7 @@ const CommentSection = ({ postid }) => {
       }
     }
     fetchComments();
+    onDataChange(comments.length)
   }, [comments]);
 
   // retrieve random username when user comments
@@ -83,6 +84,7 @@ const CommentSection = ({ postid }) => {
       document.getElementById("comment").value = "";
       fetchComments();
       setCommented(true);
+      onDataChange(comments.length)
     }
   };
 
@@ -93,7 +95,6 @@ const CommentSection = ({ postid }) => {
     }));
   };
 
-  console.log(comments)
   return (
     <div className="bg-white p-5 md:w-11/12 w-4/5 mb-4 flex flex-col border bg-card text-card-foreground shadow-md">
       <h2 className="text-xl">Comments</h2>
@@ -111,7 +112,7 @@ const CommentSection = ({ postid }) => {
         </Button>
       </div>
       <h3 className="text-green-500">{commented ? "Sent!" : ""}</h3>
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col">
         {comments ? (
           comments.map((com) => (
             <Comment
@@ -119,6 +120,7 @@ const CommentSection = ({ postid }) => {
               user={com.author}
               text={com.comment}
               time={com.created_at}
+              id={com.id}
             />
           ))
         ) : (<p>Loading comments...</p>)

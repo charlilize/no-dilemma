@@ -7,6 +7,8 @@ import { supabase } from "@/client"
 
 const Forum = () => {
   const [posts, setPosts] = useState([]);
+  const [newestFilter, setNewestFilter] = useState(false);
+  const [trendingFilter, setTrendingFilter] = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -18,6 +20,8 @@ const Forum = () => {
     };
     fetchPosts();
   }, []);
+
+
 
   return (
     <div className="w-full p-16 min-h-screen bg-gray-200 rounded-3xl">
@@ -36,13 +40,13 @@ const Forum = () => {
             {posts && posts.length > 0 ? (
               posts.map((post) => (
                 <Post 
-                key={post.id}
-                id={post.id}
-                title={post.title}
-                description={post.description}
-                timeCreated={post.created_at}
-                upvotes={post.upvotes_count}
-                totalAnswers={post.answers_count}
+                  key={post.id}
+                  id={post.id}
+                  title={post.title}
+                  description={post.description}
+                  timeCreated={post.created_at}
+                  upvotes={post.upvotes_count}
+                  totalAnswers={post.answers_count}
                 />
               ))
             ) : (<p>No posts created</p>)

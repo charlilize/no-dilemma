@@ -21,6 +21,9 @@ const DeletePostButton = ({ postid, pollid, btnCSS }) => {
         // Delete poll and poll options
         await supabase.from("polls").delete().eq("post_id", postid);
         await supabase.from("poll_options").delete().eq("poll_id", pollid);
+
+        // Delete the post's comments
+        await supabase.from("comments").delete().eq("post_id", postid)
     
         window.location = "/forum";
     };
