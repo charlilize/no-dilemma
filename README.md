@@ -1,4 +1,4 @@
-![walkthrough](https://github.com/charlilize/no-dilemma/assets/148724296/203fe1d3-0406-4349-855c-74e24aca923e)# Web Development Final Project - *NoDilemma*
+# Web Development Final Project - *NoDilemma*
 
 Submitted by: **Charlize Angeles**
 
