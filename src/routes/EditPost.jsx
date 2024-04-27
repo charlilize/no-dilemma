@@ -161,7 +161,7 @@ const EditPost = () => {
         return;
       }
 
-      window.location = "/forum";
+      window.location = `/postDetails/${postid}`;
       // Optionally, you can redirect to the post details page or display a success message
     } catch (error) {
       console.error("Error updating post and poll", error);
@@ -189,6 +189,9 @@ const EditPost = () => {
               placeholder="Post's title"
               value={post.title}
               onChange={handleChange}
+              onCopy={(e) => e.preventDefault()}
+              onCut={(e) => e.preventDefault()}
+              onPaste={(e) => e.preventDefault()}
             />
             <Label htmlFor="descrip">Description</Label>
             <Textarea
