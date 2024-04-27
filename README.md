@@ -5,6 +5,7 @@ Submitted by: **Charlize Angeles**
 This web app: **A forum website where people create, edit, and comment on posts. Each post has a built-in poll, allowing people can ask each other for advice or opinions anonymously!**
 
 Link: https://nodilemma.netlify.app/
+Image on Homepage by Freepik
 
 Time spent: **17** hours spent in total
 
@@ -49,7 +50,7 @@ GIF created with LiceCap
 
 ## Notes
 
-I had the most problems with the polls aspect of my website. Adding poll options on the front end and the back end was challenging as I had to keep track of which polls and posts it belonged to on Supabase. Especially when I was building the editing post portion of my website, it was hard because, in addition to showing the current poll options, I had to add options, too. Overall, there were many layers to building a poll from scratch that I didn't expect. Also, adding conditions that ensure posts don't have faulty values was difficult. The CSS was also tedious working on this project as I tried using a component library that sometimes worked unexpectedly, so I had to work around those hurdles as well. In this course, this project has taken me the longest by far.
+I had the most problems with the polls aspect of my website. Adding poll options on the front end and the back end was challenging as I had to keep track of which polls and posts it belonged to on Supabase. Especially when I was building the editing post portion of my website, it was hard because, in addition to showing the current poll options, I had to add options, too. Overall, there were many layers to building a poll from scratch that I didn't expect. Also, adding conditions that ensure posts don't have faulty values was difficult. The CSS was also tedious working on this project as I tried using a component library that sometimes worked unexpectedly, so I had to work around those hurdles as well. In this course, this project has taken me the longest by far. I also had some issues with deploying on Nellify at first.
 
 ## License
 
