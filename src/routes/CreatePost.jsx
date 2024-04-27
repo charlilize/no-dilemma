@@ -3,8 +3,8 @@ import { supabase } from "../client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Textarea }  from "@/components/ui/textarea";
-import { Link } from "react-router-dom"
+import { Textarea } from "@/components/ui/textarea";
+import { Link } from "react-router-dom";
 
 const CreatePost = () => {
   const [post, setPost] = useState({
@@ -13,13 +13,15 @@ const CreatePost = () => {
     descrip: "",
     question: "",
     options: [""],
+    password: "",
   });
   const [unableToCreatePost, setUnableToCreatePost] = useState(false);
   const [duplicateOptions, setDuplicateOptions] = useState(false);
 
   const addPollOption = () => {
     if (post.options.length < 10) {
-      setPost((prevPost) => ({ // Update post's poll options
+      setPost((prevPost) => ({
+        // Update post's poll options
         ...prevPost,
         options: [...prevPost.options, ""],
       }));
@@ -29,12 +31,23 @@ const CreatePost = () => {
   // Update post use state variable
   const handleChange = (event) => {
     const { id, value } = event.target;
-    setPost((prev) => {
-      return {
-        ...prev,
-        [id]: value,
-      };
-    });
+    if (id === "password") {
+      // Remove any spaces from the password value
+      const newValue = value.replace(/\s/g, "");
+      setPost((prev) => {
+        return {
+          ...prev,
+          [id]: newValue,
+        };
+      });
+    } else {
+      setPost((prev) => {
+        return {
+          ...prev,
+          [id]: value,
+        };
+      });
+    }
   };
 
   // Push post data to supabase
@@ -42,20 +55,28 @@ const CreatePost = () => {
     event.preventDefault();
 
     // Prevent adding empty fields
-    if (!post.title.trim() || !post.descrip.trim() || !post.question.trim() || !post.user.trim() || post.options.length === 0) {
+    if (
+      !post.title.trim() ||
+      !post.descrip.trim() ||
+      !post.question.trim() ||
+      !post.user.trim() ||
+      post.options.length === 0
+    ) {
       setUnableToCreatePost(true);
       setDuplicateOptions(false);
       return;
     }
-    if (post.options.some(option => !option.trim())) {
+    if (post.options.some((option) => !option.trim())) {
       setUnableToCreatePost(true);
       setDuplicateOptions(false);
       return;
     }
-    const uniqueOptions = new Set(post.options.map((option) => option.trim().toLowerCase())); // check if any options have the same name
+    const uniqueOptions = new Set(
+      post.options.map((option) => option.trim().toLowerCase())
+    ); // check if any options have the same name
     if (uniqueOptions.size !== post.options.length) {
       setDuplicateOptions(true);
-      console.error('Duplicate options are not allowed.');
+      console.error("Duplicate options are not allowed.");
       return;
     }
     setUnableToCreatePost(false);
@@ -64,7 +85,12 @@ const CreatePost = () => {
     // Create the post
     const { data: postData, error: postError } = await supabase
       .from("posts")
-      .insert({ title: post.title, description: post.descrip, author: post.user })
+      .insert({
+        title: post.title,
+        description: post.descrip,
+        author: post.user,
+        secret_key: post.password,
+      })
       .select()
       .single();
 
@@ -90,28 +116,29 @@ const CreatePost = () => {
     const pollId = pollData.id;
 
     // Insert each poll option
-    const optionInsertPromises = post.options.map((option) => 
-      supabase.from("poll_options").insert({ poll_id: pollId, option})
+    const optionInsertPromises = post.options.map((option) =>
+      supabase.from("poll_options").insert({ poll_id: pollId, option })
     );
 
     const optionInsertResults = await Promise.all(optionInsertPromises);
 
-    const optionInsertErrors = optionInsertResults.filter((result) => result.error);
-  
+    const optionInsertErrors = optionInsertResults.filter(
+      (result) => result.error
+    );
+
     if (optionInsertErrors.length > 0) {
       console.error("Error inserting poll options:", optionInsertErrors);
       return;
     }
-  
-    window.location = "/forum";
 
+    window.location = "/forum";
   };
 
   const removeOption = (index) => {
     setPost((prevPost) => ({
       ...prevPost,
       options: prevPost.options.filter((_, i) => i !== index),
-    }))
+    }));
   };
 
   return (
@@ -119,17 +146,32 @@ const CreatePost = () => {
       <div className="bg-white p-5 flex flex-col border bg-card text-card-foreground shadow-2xl rounded-lg w-1/2 gap-3">
         <h1 className="text-3xl font-bold">New Post</h1>
         <Label htmlFor="user">Username</Label>
-        <Input 
-          type="user" 
-          id="user" 
-          placeholder="Enter display name for post" 
+        <Input
+          type="user"
+          id="user"
+          placeholder="Enter display name for post"
           onChange={handleChange}
         />
+        <Label htmlFor="pass">Secret Key (No spaces)</Label>
+        <Input
+          type="pass"
+          id="password"
+          placeholder="Enter a passcode to let you edit or delete this post later. Make sure to remember it."
+          onChange={handleChange}
+          onBeforeInput={(event) => {
+            const allowedCharacters = /^[^\s]+$/;
+            const isAllowed = allowedCharacters.test(event.data);
+
+            if (!isAllowed) {
+              event.preventDefault();
+            }
+          }}
+        />
         <Label htmlFor="title">Title</Label>
-        <Input 
-          type="title" 
-          id="title" 
-          placeholder="Post's title" 
+        <Input
+          type="title"
+          id="title"
+          placeholder="Post's title"
           onChange={handleChange}
         />
         <Label htmlFor="descrip">Description</Label>
@@ -150,26 +192,31 @@ const CreatePost = () => {
         <Label htmlFor="options">Poll Options</Label>
         {post.options.map((option, index) => (
           <div className="flex" key={index}>
-          <Input
-            key={index}
-            type="text"
-            placeholder={`Option ${index + 1}`}
-            value={option}
-            onChange={(e) =>
-              setPost({
-                ...post,
-                options: post.options.map((opt, i) => // Update poll option if it changes
-                i === index ? e.target.value : opt
-              ),
-            })
-          }
-          />
-          <Button onClick={() => removeOption(index)}>Remove</Button>
+            <Input
+              key={index}
+              type="text"
+              placeholder={`Option ${index + 1}`}
+              value={option}
+              onChange={(e) =>
+                setPost({
+                  ...post,
+                  options: post.options.map(
+                    (
+                      opt,
+                      i // Update poll option if it changes
+                    ) => (i === index ? e.target.value : opt)
+                  ),
+                })
+              }
+            />
+            <Button onClick={() => removeOption(index)}>Remove</Button>
           </div>
         ))}
         <Button
           className={`${
-            post.options.length >= 10 ? "bg-red-500 cursor-not-allowed hover:bg-red-600" : ""
+            post.options.length >= 10
+              ? "bg-red-500 cursor-not-allowed hover:bg-red-600"
+              : ""
           }`}
           onClick={addPollOption}
         >
@@ -178,14 +225,32 @@ const CreatePost = () => {
             : "+ Add Poll Option"}
         </Button>
         <div className="flex justify-end gap-5 my-2">
-            <h3 className="text-red-500">
-              {unableToCreatePost == true && (!post.title.trim() || !post.descrip.trim() || !post.user.trim() || !post.question.trim() || post.options.some(option => !option.trim())) ? "A field is empty. Please fill in all fields." : ""}
-              {duplicateOptions ===  true ? " Options cannot have the same name." : ""}
-            </h3>
-            <Link to="/forum">
-              <button className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 border-b-4 border-black rounded">Cancel</button>
-            </Link>
-            <button type="submit" value="submit" onClick={createPost} className="bg-mesa hover:bg-mesa-light text-white font-bold py-2 px-4 border-b-4 border-black rounded">Create Post</button>
+          <h3 className="text-red-500">
+            {unableToCreatePost == true &&
+            (!post.title.trim() ||
+              !post.descrip.trim() ||
+              !post.user.trim() ||
+              !post.question.trim() ||
+              post.options.some((option) => !option.trim()))
+              ? "A field is empty. Please fill in all fields."
+              : ""}
+            {duplicateOptions === true
+              ? " Options cannot have the same name."
+              : ""}
+          </h3>
+          <Link to="/forum">
+            <button className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 border-b-4 border-black rounded">
+              Cancel
+            </button>
+          </Link>
+          <button
+            type="submit"
+            value="submit"
+            onClick={createPost}
+            className="bg-mesa hover:bg-mesa-light text-white font-bold py-2 px-4 border-b-4 border-black rounded"
+          >
+            Create Post
+          </button>
         </div>
       </div>
     </div>

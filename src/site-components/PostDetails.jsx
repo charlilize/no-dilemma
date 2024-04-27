@@ -15,6 +15,7 @@ import { faCircleUp } from "@fortawesome/free-regular-svg-icons";
 import { Link } from "react-router-dom";
 import CommentSection from "./CommentSection";
 import DeletePostButton from "./DeletePostButton";
+import EditPostBtn from "./EditPostBtn";
 
 const PostDetails = () => {
   const { postid } = useParams(); // get id from the URL
@@ -197,14 +198,19 @@ const PostDetails = () => {
                 <FontAwesomeIcon className="text-3xl" icon={faEllipsis} />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <Link to={`/editPost/${postid}`}>
-                  <DropdownMenuItem>Edit Post</DropdownMenuItem>
-                </Link>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                  <EditPostBtn
+                    password={post.secret_key}
+                    postid={postid}
+                    pollid={poll.poll_id}
+                  />
+                </DropdownMenuItem>
                 <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                   <DeletePostButton
                     btnCSS={false}
                     postid={postid}
                     pollid={poll.poll_id}
+                    password={post.secret_key}
                   />
                 </DropdownMenuItem>
               </DropdownMenuContent>

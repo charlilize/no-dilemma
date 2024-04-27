@@ -18,7 +18,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route index={false} path="/forum" element={<Forum/>}/>
             <Route index={false} path="/postDetails/:postid" element={<PostDetails/>}/>
             <Route index={false} path="/createPost" element={<CreatePost/>}/>
-            <Route index={false} path="/editPost/:postid" element={<EditPost/>}/>
+            <Route index={false} path="/editPost/:postid/:pollid" element={<EditPost/>}/>
           </Route>
         </Routes>
       </BrowserRouter>  
