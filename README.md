@@ -5,6 +5,7 @@ Submitted by: **Charlize Angeles**
 This web app: **A forum website where people create, edit, and comment on posts. Each post has a built-in poll, allowing people can ask each other for advice or opinions anonymously!**
 
 Link: https://nodilemma.netlify.app/
+
 Image on Homepage by Freepik
 
 Time spent: **17** hours spent in total
