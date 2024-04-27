@@ -1,4 +1,4 @@
-# Web Development Final Project - *NoDilemma*
+![walkthrough](https://github.com/charlilize/no-dilemma/assets/148724296/203fe1d3-0406-4349-855c-74e24aca923e)# Web Development Final Project - *NoDilemma*
 
 Submitted by: **Charlize Angeles**
 
@@ -6,7 +6,7 @@ This web app: **A forum website where people create, edit, and comment on posts.
 
 Link: https://nodilemma.netlify.app/
 
-Time spent: **15** hours spent in total
+Time spent: **17** hours spent in total
 
 ## Required Features
 
@@ -43,15 +43,9 @@ The following **additional** features are implemented:
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
+![walkthrough](https://github.com/charlilize/no-dilemma/assets/148724296/98d988dc-4b78-4caa-91c3-722e627a3a94)
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
-
-<!-- Replace this with whatever GIF tool you used! -->
-GIF created with ...  
-<!-- Recommended tools:
-[Kap](https://getkap.co/) for macOS
-[ScreenToGif](https://www.screentogif.com/) for Windows
-[peek](https://github.com/phw/peek) for Linux. -->
+GIF created with LiceCap 
 
 ## Notes
 
