@@ -1,6 +1,4 @@
-# Web Development Final Project - *NoDilemma*
-
-Submitted by: **Charlize Angeles**
+# *NoDilemma*
 
 This web app: **A forum website where people create, edit, and comment on posts. Each post has a built-in poll, allowing people can ask each other for advice or opinions anonymously!**
 
@@ -29,12 +27,6 @@ The following **required** functionality is completed:
 The following **optional** features are implemented:
 
 - [X] Users can only edit and deleted posts or delete comments by entering the secret key, which is set by the user during post creation
-- [ ] Upon launching the web app, the user is assigned a random user ID. It will be associated with all posts and comments that they make and displayed on them.
-- [ ] Users can repost a previous post by referencing its post ID. On the post page of the new post, the referenced post is displayed and linked, creating a thread
-- [ ] Users can customize the interface of the web app
-- [ ] Users can share and view web videos
-- [ ] Users can set flags while creating a post. Then users can filter posts by flags on the home feed.
-- [ ] Users can upload images directly from their local machine as an image file
 - [X] Display a loading animation whenever data is being fetched
 
 The following **additional** features are implemented:
@@ -55,7 +47,7 @@ I had the most problems with the polls aspect of my website. Adding poll options
 
 ## License
 
-    Copyright 2024 Charlize Angeles
+    Copyright 2026 Charlize Angeles
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
